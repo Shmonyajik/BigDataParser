@@ -1,0 +1,68 @@
+ curl -X PUT "http://localhost:9200/shonen-junk" "Content-Type: application/json" -d '{
+  "mappings": {
+    "properties": {
+      "token": {
+        "properties": {
+          "chainId": { "type": "integer" },
+          "contract": { "type": "keyword" },
+          "tokenId": { "type": "keyword" },
+          "name": { "type": "text" },
+          "description": { "type": "text" },
+          "image": { "type": "keyword" },
+          "imageSmall": { "type": "keyword" },
+          "imageLarge": { "type": "keyword" },
+          "media": { "type": "text" },
+          "kind": { "type": "keyword" },
+          "isFlagged": { "type": "boolean" },
+          "isSpam": { "type": "boolean" },
+          "lastFlagUpdate": { "type": "date" },
+          "lastFlagChange": { "type": "date" },
+          "supply": { "type": "integer" },
+          "remainingSupply": { "type": "integer" },
+          "rarity": { "type": "float" },
+          "rarityRank": { "type": "integer" },
+          "collection": {
+            "properties": {
+              "id": { "type": "keyword" },
+              "name": { "type": "text" },
+              "image": { "type": "keyword" },
+              "slug": { "type": "keyword" },
+              "symbol": { "type": "keyword" },
+              "creator": { "type": "keyword" },
+              "tokenCount": { "type": "integer" }
+            }
+          },
+          "owner": { "type": "keyword" },
+          "attributes": {
+            "type": "nested",
+            "properties": {
+              "key": { "type": "keyword" },
+              "kind": { "type": "keyword" },
+              "value": { "type": "text" },
+              "tokenCount": { "type": "integer" },
+              "onSaleCount": { "type": "integer" },
+              "floorAskPrice": { "type": "float" },
+              "topBidValue": { "type": "float" },
+              "createdAt": { "type": "date" }
+            }
+          }
+        }
+      },
+      "market": {
+        "properties": {
+          "floorAsk": {
+            "properties": {
+              "id": { "type": "keyword" },
+              "price": { "type": "float" },
+              "maker": { "type": "keyword" },
+              "validFrom": { "type": "date" },
+              "validUntil": { "type": "date" },
+              "source": { "type": "keyword" }
+            }
+          }
+        }
+      },
+      "updatedAt": { "type": "date" }
+    }
+  }
+}

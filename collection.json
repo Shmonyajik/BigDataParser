@@ -1,0 +1,148 @@
+{
+    "collections": [
+        {
+            "chainId": 1,
+            "id": "0xf4121a2880c225f90dc3b3466226908c9cb2b085",
+            "slug": "shonen-junk-official",
+            "createdAt": "2022-02-09T21:55:09.912Z",
+            "updatedAt": "2023-10-30T16:25:46.731Z",
+            "name": "Shonen Junk Official",
+            "symbol": "SJ",
+            "image": "https://i.seadn.io/gae/2BhnJeLjtYuJhzUu9djeBNOUEUBL6M-HaegFqTHJxeTtIjS6Juk-XIUlmF2oYfEI2Z4kNfEHS0scFUfjltfZfTEQqP7KI85fN8D2?w=500&auto=format",
+            "banner": "https://i.seadn.io/gae/1o2_UEwSPvxSXybDvQ4v42cCqhZrtTV-zAvNYNT_IL6RH5ZXb8GQJxQYPuJDTeRW1-zG03CFTJPvsC37lxWVrWQREErEpUEeFSnM62g?w=500&auto=format",
+            "discordUrl": "https://discord.gg/shonenjunk",
+            "externalUrl": "https://shonenjunk.xyz",
+            "twitterUsername": "shonenjunkNFT",
+            "openseaVerificationStatus": "verified",
+            "description": "From the founders of Crunchyroll...\n\nInspired by the characters and stories we grew up on and love, we�re planting the seeds starting with Shonen Junk - a collection of 9,001 generative NFTs with 200+ unique shonen-inspired traits.\n\nLearn more at https://shonenjunk.xyz",
+            "isSpam": false,
+            "sampleImages": [
+                "https://i.seadn.io/gae/OXSIxAWK-ZmuHUshqqm6rmddi8kVdS29TFhnSiEHZMs8PtXz3zqEocFooeYO5ZGQtBmFOctl02EdbSF5sK0zlvylpIebArAbbPWWtQ?w=500&auto=format",
+                "https://i.seadn.io/gae/dPvFEf0EezN0ysBS0AgYHh3VrANY3Ap8tzsKK41n1Hvtd3GnJBgMQtWuUEozd16h-EygZfMjcabapy2L_ZyTbvVhmv_1bfhQPZ7v3Eo?w=500&auto=format",
+                "https://i.seadn.io/gae/H6MXyifsWemsm7dzeqacIs_Nhrpgn0gN1YUZTBZwHZxT-eQewSHfUaLSbDe1jO5KzeXWitQkrnOSQigpCmY475yQ-fAySFneP2h_6A?w=500&auto=format",
+                "https://i.seadn.io/gae/VYwhvj9wEMYEd3kIq0JF6KnDtpxIN5U1Kcl-nNJP5WB19JHLOpzyU1xVtasPhp_R5Pdd0T2K3kDF8dDqlTn8UqQW3kfzFRmxK2YO?w=500&auto=format"
+            ],
+            "tokenCount": "9001",
+            "onSaleCount": "257",
+            "primaryContract": "0xf4121a2880c225f90dc3b3466226908c9cb2b085",
+            "tokenSetId": "contract:0xf4121a2880c225f90dc3b3466226908c9cb2b085",
+            "creator": "0xdb275fac4239aa53e3c56b7e999dfc2b2406b671",
+            "royalties": {
+                "recipient": "0x1b69167146ad7680608bcc848b343657b969cc48",
+                "breakdown": [
+                    {
+                        "bps": 700,
+                        "recipient": "0x1b69167146ad7680608bcc848b343657b969cc48"
+                    }
+                ],
+                "bps": 700
+            },
+            "allRoyalties": {
+                "eip2981": [
+                    {
+                        "bps": 700,
+                        "recipient": "0x1b69167146ad7680608bcc848b343657b969cc48"
+                    }
+                ],
+                "onchain": [
+                    {
+                        "bps": 700,
+                        "recipient": "0x1b69167146ad7680608bcc848b343657b969cc48"
+                    }
+                ],
+                "opensea": [
+                    {
+                        "bps": 700,
+                        "recipient": "0x1b69167146ad7680608bcc848b343657b969cc48"
+                    }
+                ]
+            },
+            "floorAsk": {
+                "id": "0x49cd937aba875d3b4a85d8d0791f37f6157318cffce4a904b52b0c32d59fc94e",
+                "sourceDomain": "opensea.io",
+                "price": {
+                    "currency": {
+                        "contract": "0x0000000000000000000000000000000000000000",
+                        "name": "Ether",
+                        "symbol": "ETH",
+                        "decimals": 18
+                    },
+                    "amount": {
+                        "raw": "15999000000000000",
+                        "decimal": 0.016,
+                        "usd": 28.76885,
+                        "native": 0.016
+                    }
+                },
+                "maker": "0x71b7f0c5f064dd4278feb6a8f732f7167df3ed27",
+                "validFrom": 1698683144,
+                "validUntil": 1698686744,
+                "token": {
+                    "contract": "0xf4121a2880c225f90dc3b3466226908c9cb2b085",
+                    "tokenId": "8830",
+                    "name": null,
+                    "image": "https://i.seadn.io/gae/QZkAXdKy-fa1ppoPmWfPY4auILiQyvPfhUplneQD8aHXXKqw3Vf7l91RfZulsLwAu59QtVWtmuY9QXrBXKVoUze66AVztrrKVWOYSA?w=500&auto=format"
+                }
+            },
+            "topBid": {
+                "id": "0x9daccaf813f720e296eabd8a63983bcde93d99f1a300316be62d60f7c2dc8f0a",
+                "sourceDomain": "opensea.io",
+                "price": {
+                    "currency": {
+                        "contract": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                        "name": "Wrapped Ether",
+                        "symbol": "WETH",
+                        "decimals": 18
+                    },
+                    "amount": {
+                        "raw": "13000000000000000",
+                        "decimal": 0.013,
+                        "usd": 23.35169,
+                        "native": 0.013
+                    },
+                    "netAmount": {
+                        "raw": "12935000000000000",
+                        "decimal": 0.01294,
+                        "usd": 23.23493,
+                        "native": 0.01294
+                    }
+                },
+                "maker": "0x74a6ada7952deb6807105ee74beebc3087f35328",
+                "validFrom": 1698667509,
+                "validUntil": 1701086709
+            },
+            "rank": {
+                "1day": 1357,
+                "7day": null,
+                "30day": 1349,
+                "allTime": 1148
+            },
+            "volume": {
+                "1day": 0.0175,
+                "7day": 0.35439,
+                "30day": 1.70446,
+                "allTime": 1693.06907
+            },
+            "volumeChange": {
+                "1day": 0.4375,
+                "7day": 0.6682915422866809,
+                "30day": 0.14487118321190717
+            },
+            "floorSale": {
+                "1day": 0.0159,
+                "7day": 0.0163,
+                "30day": 0.0206
+            },
+            "floorSaleChange": {
+                "1day": 1.0062264150943396,
+                "7day": 0.9815337423312883,
+                "30day": 0.7766504854368932
+            },
+            "collectionBidSupported": true,
+            "ownerCount": 1878,
+            "contractKind": "erc721",
+            "mintedTimestamp": null,
+            "mintStages": []
+        }
+    ]
+}

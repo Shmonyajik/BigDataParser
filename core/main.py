@@ -1,18 +1,17 @@
 import requests
 from elasticsearch import Elasticsearch
 import json
+
 def request(url):
-      
-      headers = {
+    headers = {
         "accept": "*/*",
         "x-api-key": "demo-api-key"
-        }
-      return requests.get(url, headers=headers).text
-def create_index(json_data):
-    return 0
+    }
+    return requests.get(url, headers=headers).text
+
 def get_data():
     index_name = "shonen-junk"
-    es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+    es = Elasticsearch(hosts=[f'http://elasticsearch:9200'])
 
     if es.indices.exists(index=index_name):
         es.indices.delete(index=index_name)

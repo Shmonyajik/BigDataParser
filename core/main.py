@@ -13,9 +13,16 @@ def get_data():
     index_name = "shonen-junk"
     es = Elasticsearch(hosts=[f'http://elasticsearch:9200'])
 
+    number_of_shards = 3
+    settings = {
+        "settings": {
+            "number_of_shards": number_of_shards
+        }
+    }
+
     if es.indices.exists(index=index_name):
         es.indices.delete(index=index_name)
-    es.indices.create(index=index_name)
+    es.indices.create(index=index_name, body=settings)
 
     collection_metadata_url = "https://api.reservoir.tools/collections/v7?id=0xf4121a2880c225f90dc3b3466226908c9cb2b085"
     #tokens_url = "https://api.reservoir.tools/tokens/v6?collection=0xf4121a2880c225f90dc3b3466226908c9cb2b085&flagStatus=-1&sortBy=tokenId&sortDirection=asc&limit=100&includeAttributes=true&includeDynamicPricing=true&continuation=MHhmNDEyMWEyODgwYzIyNWY5MGRjM2IzNDY2MjI2OTA4YzljYjJiMDg1Xzk5"

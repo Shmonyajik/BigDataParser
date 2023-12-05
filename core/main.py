@@ -93,10 +93,10 @@ def get_owners_destribution(collection_addresses, collection_ownerscount, es):
                 print(f"{i}/{collection_ownerscount[key]}")
                 
         es.indices.refresh(index=key+"_owners")
-def get_user_acrtivity(collection_addresses, es):
+def get_user_acrtivity(collection_addresses, collections_realese_date, es):
     
     for key in collection_addresses:
-        #cтрока запроса для выборки токенов
+        #cтрока запроса для выборки активностей
         activities_url = "https://api.reservoir.tools/collections/activity/v6?collection="+collection_addresses[key]+"&excludeSpam=true&limit=1000&sortBy=createdAt&includeMetadata=false"
 
         if es.indices.exists(index=key+"_activities"):
@@ -113,7 +113,7 @@ def get_user_acrtivity(collection_addresses, es):
         continuation = None # токен смещения
         createdAt = "2023-10-01T00:00:00.000Z"
         
-        while datetime.strptime(createdAt, "%Y-%m-%dT%H:%M:%S.%fZ") > datetime.strptime("2023-01-01T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ"):
+        while datetime.strptime(createdAt, "%Y-%m-%dT%H:%M:%S.%fZ") > datetime.strptime(collections_realese_date[key], "%Y-%m-%dT%H:%M:%S.%fZ"):
             if(continuation):
                 if(activities_url.__contains__("&continuation=")):
                     activities_url=activities_url[:(activities_url.find("&continuation=")+14)]+continuation #14
@@ -136,11 +136,16 @@ def main():
         "azuki": "0xED5AF388653567Af2F388E6224dC7C4b3241C544",
         "kiwami": "0x701A038aF4Bd0fc9b69A829DdcB2f61185a49568"
         }
+    collections_realese_date = {
+        "shonen_junk":"2023-01-31T03:00:00.000Z" ,
+        "azuki": "2023-01-10T03:00:00.000Z",
+        "kiwami": "2023-03-21T03:00:00.000Z"
+        }
     
     
     collection_ownerscount = get_rarity_price_data(collections_addresses, es)
     get_owners_destribution(collections_addresses, collection_ownerscount, es)
-    get_user_acrtivity(collections_addresses, es)
+    get_user_acrtivity(collections_addresses,collections_realese_date, es)
 
 
 if(__name__ == "__main__"):

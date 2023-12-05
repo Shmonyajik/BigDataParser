@@ -11,7 +11,7 @@ def request(url):
 
 def get_data():
     index_name = "shonen-junk"
-    es = Elasticsearch(hosts=[f'http://elasticsearch:9200'])
+    es = Elasticsearch(hosts=['http://elasticsearch-node1:9200', 'http://elasticsearch-node2:9200'])
 
     number_of_shards = 3
     settings = {

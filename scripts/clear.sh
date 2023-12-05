@@ -1,9 +1,7 @@
-docker stop elasticsearch
-docker stop kibana
+docker compose stop
 docker stop reindexer
 
 docker network rm elastic
 
-docker rm elasticsearch
-docker rm kibana
+docker compose rm -f
 docker rm reindexer

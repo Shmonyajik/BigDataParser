@@ -130,7 +130,7 @@ def get_user_acrtivity(collection_addresses, collections_realese_date, es):
         es.indices.refresh(index=key+"_activities")
 
 def main():
-    es = Elasticsearch([{'host': 'localhost', 'port': 9200, 'http_auth': ('elastic', 'Ghbdtn19735')}])
+    es = Elasticsearch(hosts=['http://elasticsearch-node1:9200', 'http://elasticsearch-node2:9200'])
     collections_addresses = {
         "shonen_junk":"0xF4121a2880c225f90DC3B3466226908c9cB2b085" ,
         "azuki": "0xED5AF388653567Af2F388E6224dC7C4b3241C544",

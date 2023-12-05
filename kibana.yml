@@ -1,0 +1,2 @@
+server.host: "0.0.0.0"
+elasticsearch.hosts: ["http://elasticsearch-node1:9200", "http://elasticsearch-node2:9200"]

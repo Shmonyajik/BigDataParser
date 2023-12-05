@@ -3,6 +3,7 @@ from elasticsearch import Elasticsearch
 import json
 from datetime import datetime
 
+
 def request(url):
       
       headers = {
@@ -34,29 +35,29 @@ def get_rarity_price_data(collection_addresses, es):
         tokens_count = json.loads(request(collection_metadata_url)).get("collections", [])[0]["tokenCount"]
         collection_ownerscount[key] = json.loads(request(collection_metadata_url)).get("collections", [])[0]["ownerCount"]
         
-# ########################################################## сохранение метаданных в файл для отладки
-#         file_path = "token.json"
-#         with open(file_path, 'w') as file:
-#             json.dump(json.loads(request(tokens_url)).get("tokens", [])[0], file, indent=4)
-# ###########################################################  
+########################################################## сохранение метаданных в файл для отладки
+        file_path = "token.json"
+        with open(file_path, 'w') as file:
+            json.dump(json.loads(request(tokens_url)).get("tokens", [])[0], file, indent=4)
+###########################################################  
 
-#         continuation = None # токен смещения
+        continuation = None # токен смещения
     
-#         i = 0
-#         while i < int(tokens_count):
-#             if(continuation):
-#                 if(tokens_url.__contains__("&continuation=")):
-#                     tokens_url=tokens_url[:(tokens_url.find("&continuation=")+14)]+continuation #14
-#                 else:
-#                     tokens_url = tokens_url+"&continuation="+continuation
-#             data = json.loads(request(tokens_url))
-#             continuation = data.get("continuation")
-#             for token in enumerate(data.get("tokens", [])):       
-#                 es.index(index=key+"_tokens", body=token[1]["token"])
-#                 i+=1
-#                 print(f"{i}/{tokens_count}")
+        i = 0
+        while i < int(tokens_count):
+            if(continuation):
+                if(tokens_url.__contains__("&continuation=")):
+                    tokens_url=tokens_url[:(tokens_url.find("&continuation=")+14)]+continuation #14
+                else:
+                    tokens_url = tokens_url+"&continuation="+continuation
+            data = json.loads(request(tokens_url))
+            continuation = data.get("continuation")
+            for token in enumerate(data.get("tokens", [])):       
+                es.index(index=key+"_tokens", body=token[1]["token"])
+                i+=1
+                print(f"{i}/{tokens_count}")
                 
-#         es.indices.refresh(index=key+"_tokens")
+        es.indices.refresh(index=key+"_tokens")
     return collection_ownerscount
 def get_owners_destribution(collection_addresses, collection_ownerscount, es):
 

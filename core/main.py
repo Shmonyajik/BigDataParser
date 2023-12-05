@@ -1,59 +1,145 @@
 import requests
 from elasticsearch import Elasticsearch
 import json
+from datetime import datetime
+
 def request(url):
       
       headers = {
         "accept": "*/*",
-        "x-api-key": "demo-api-key"
+        "x-api-key": "ff96c522-df70-5747-8273-9eabfa7d6488"
         }
       return requests.get(url, headers=headers).text
-def create_index(json_data):
-    return 0
-def get_data():
-    index_name = "shonen-junk"
-    es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+def get_max_divisor(number, limit):
+    max_divisor = 1
+    for i in range(2, min(number, limit) + 1):
+        if number % i == 0:
+            max_divisor = i
+    return max_divisor
 
-    if es.indices.exists(index=index_name):
-        es.indices.delete(index=index_name)
-    es.indices.create(index=index_name)
+def get_rarity_price_data(collection_addresses, es):
+    collection_ownerscount = {}
 
-    collection_metadata_url = "https://api.reservoir.tools/collections/v7?id=0xf4121a2880c225f90dc3b3466226908c9cb2b085"
-    #tokens_url = "https://api.reservoir.tools/tokens/v6?collection=0xf4121a2880c225f90dc3b3466226908c9cb2b085&flagStatus=-1&sortBy=tokenId&sortDirection=asc&limit=100&includeAttributes=true&includeDynamicPricing=true&continuation=MHhmNDEyMWEyODgwYzIyNWY5MGRjM2IzNDY2MjI2OTA4YzljYjJiMDg1Xzk5"
+    for key in collection_addresses:
+        #cтрока запроса для выборки токенов
+        tokens_url = "https://api.reservoir.tools/tokens/v6?collection="+collection_addresses[key]+"&flagStatus=-1&sortBy=tokenId&sortDirection=asc&limit=100&includeDynamicPricing=true&includeLastSale=true"
+        
+        # строка запроса для выборки метаданных коллекции(для получения колва токенов)
+        collection_metadata_url = "https://api.reservoir.tools/collections/v7?id="+ collection_addresses[key] 
 
-    #tokens_url = "https://api.reservoir.tools/tokens/v6?collection=0xf4121a2880c225f90dc3b3466226908c9cb2b085&flagStatus=-1&sortBy=tokenId&sortDirection=asc&limit=100&includeAttributes=true&includeDynamicPricing=true"
+        if es.indices.exists(index=key+"_tokens"):
+            es.indices.delete(index=key+"_tokens")
+        es.indices.create(index=key+"_tokens")
     
-    tokens_url = "https://api.reservoir.tools/tokens/v6?collection=0x701A038aF4Bd0fc9b69A829DdcB2f61185a49568&flagStatus=-1&sortBy=tokenId&sortDirection=asc&limit=100&includeDynamicPricing=true&includeLastSale=true"
+        tokens_count = json.loads(request(collection_metadata_url)).get("collections", [])[0]["tokenCount"]
+        collection_ownerscount[key] = json.loads(request(collection_metadata_url)).get("collections", [])[0]["ownerCount"]
+        
+# ########################################################## сохранение метаданных в файл для отладки
+#         file_path = "token.json"
+#         with open(file_path, 'w') as file:
+#             json.dump(json.loads(request(tokens_url)).get("tokens", [])[0], file, indent=4)
+# ###########################################################  
 
+#         continuation = None # токен смещения
     
-###########################################################
-    file_path = "token.json"
-    with open(file_path, 'w') as file:
-        json.dump(json.loads(request(tokens_url)).get("tokens", [])[0], file, indent=4)
+#         i = 0
+#         while i < int(tokens_count):
+#             if(continuation):
+#                 if(tokens_url.__contains__("&continuation=")):
+#                     tokens_url=tokens_url[:(tokens_url.find("&continuation=")+14)]+continuation #14
+#                 else:
+#                     tokens_url = tokens_url+"&continuation="+continuation
+#             data = json.loads(request(tokens_url))
+#             continuation = data.get("continuation")
+#             for token in enumerate(data.get("tokens", [])):       
+#                 es.index(index=key+"_tokens", body=token[1]["token"])
+#                 i+=1
+#                 print(f"{i}/{tokens_count}")
+                
+#         es.indices.refresh(index=key+"_tokens")
+    return collection_ownerscount
+def get_owners_destribution(collection_addresses, collection_ownerscount, es):
+
+    for key in collection_addresses:
+        divisor = get_max_divisor(collection_ownerscount[key], 501)
+        #cтрока запроса для выборки держателей токенов
+        owners_url = "https://api.reservoir.tools/owners/v2?collection="+collection_addresses[key]+"&offset=0&limit="+str(divisor)+"&displayCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7"
+
+        if es.indices.exists(index=key+"_owners"):
+            es.indices.delete(index=key+"_owners")
+        es.indices.create(index=key+"_owners")
+
+########################################################### сохранение метаданных в файл для отладки
+        file_path = "owner.json"
+        with open(file_path, 'w') as file:
+            json.dump(json.loads(request(owners_url)).get("owners", [])[0], file, indent=4)
 ###########################################################  
-    tokens_count = json.loads(request(collection_metadata_url)).get("collections", [])[0]["tokenCount"]
-    # json_token = json.loads(request(tokens_url)).get("tokens", [])[0]
-    # create_index(json_token)
-    continuation = None
+
+        continuation = 0 # токен смещения
     
-    i = 0
-    while i < int(tokens_count):
-        if(continuation):
-            if(tokens_url.__contains__("&continuation=")):
-                tokens_url=tokens_url[:(tokens_url.find("&continuation=")+14)]+continuation #14
-            else:
-                tokens_url = tokens_url+"&continuation="+continuation
-        data = json.loads(request(tokens_url))
-        continuation = data.get("continuation")
-        for token in enumerate(data.get("tokens", [])):       
-            es.index(index=index_name, body=token[1]["token"])
-            i+=1
-            print(f"{i}/{tokens_count}")
+        i = 0
+        while i < int(collection_ownerscount[key]):
             
-    es.indices.refresh(index=index_name)
+            if(owners_url.__contains__("&offset=")):
+                owners_url=owners_url[:(owners_url.find("&offset=")+8)]+str(continuation)+"&limit="+str(divisor)+"&displayCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7"
+            else:
+                owners_url = owners_url+"&offset="+str(continuation)+"&limit="+str(divisor)+"&displayCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7"
+            data = json.loads(request(owners_url))
+            continuation +=divisor
+            for owner in enumerate(data.get("owners", [])):       
+                es.index(index=key+"_owners", body=owner[1])
+                i+=1
+                print(f"{i}/{collection_ownerscount[key]}")
+                
+        es.indices.refresh(index=key+"_owners")
+def get_user_acrtivity(collection_addresses, es):
+    
+    for key in collection_addresses:
+        #cтрока запроса для выборки токенов
+        activities_url = "https://api.reservoir.tools/collections/activity/v6?collection="+collection_addresses[key]+"&excludeSpam=true&limit=1000&sortBy=createdAt&includeMetadata=false"
+
+        if es.indices.exists(index=key+"_activities"):
+            es.indices.delete(index=key+"_activities")
+        es.indices.create(index=key+"_activities")
+    
+        
+########################################################## сохранение метаданных в файл для отладки
+        file_path = "activity.json"
+        with open(file_path, 'w') as file:
+            json.dump(json.loads(request(activities_url)).get("activities", [])[0], file, indent=4)
+###########################################################  
+
+        continuation = None # токен смещения
+        createdAt = "2023-10-01T00:00:00.000Z"
+        
+        while datetime.strptime(createdAt, "%Y-%m-%dT%H:%M:%S.%fZ") > datetime.strptime("2023-01-01T00:00:00.000Z", "%Y-%m-%dT%H:%M:%S.%fZ"):
+            if(continuation):
+                if(activities_url.__contains__("&continuation=")):
+                    activities_url=activities_url[:(activities_url.find("&continuation=")+14)]+continuation #14
+                else:
+                    activities_url = activities_url+"&continuation="+continuation
+            data = json.loads(request(activities_url)).get("activities", [])
+            continuation = json.loads(request(activities_url)).get("continuation")
+            y=0
+            while y < len(data):
+                es.index(index=key+"_activities", body={"createdAt": data[y]["createdAt"]})
+                y+=1    
+            createdAt = data[y-1]["createdAt"]
+            print(f"{createdAt}")
+        es.indices.refresh(index=key+"_activities")
 
 def main():
-    get_data()
+    es = Elasticsearch([{'host': 'localhost', 'port': 9200, 'http_auth': ('elastic', 'Ghbdtn19735')}])
+    collections_addresses = {
+        "shonen_junk":"0xF4121a2880c225f90DC3B3466226908c9cB2b085" ,
+        "azuki": "0xED5AF388653567Af2F388E6224dC7C4b3241C544",
+        "kiwami": "0x701A038aF4Bd0fc9b69A829DdcB2f61185a49568"
+        }
+    
+    
+    collection_ownerscount = get_rarity_price_data(collections_addresses, es)
+    get_owners_destribution(collections_addresses, collection_ownerscount, es)
+    get_user_acrtivity(collections_addresses, es)
 
 
 if(__name__ == "__main__"):
